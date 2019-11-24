@@ -1,0 +1,45 @@
+[ExifTool]      ExifToolVersion                 : 11.30
+[File]          FileName                        : mire+edit_capture_time.jpg
+[File]          Directory                       : /Users/ak/.gopath/src/github.com/adrienkohlbecker/picturelint/cases/testdata
+[File]          FileSize                        : 75 kB
+[File]          FileModifyDate                  : 2019:04:22 14:50:59+02:00
+[File]          FileAccessDate                  : 2019:04:22 14:52:12+02:00
+[File]          FileInodeChangeDate             : 2019:04:22 14:50:59+02:00
+[File]          FilePermissions                 : rw-r--r--
+[File]          FileType                        : JPEG
+[File]          FileTypeExtension               : jpg
+[File]          MIMEType                        : image/jpeg
+[File]          ExifByteOrder                   : Big-endian (Motorola, MM)
+[File]          CurrentIPTCDigest               : 51b387069299d9c8143d5e3bf4eec595
+[File]          ImageWidth                      : 768
+[File]          ImageHeight                     : 576
+[File]          EncodingProcess                 : Baseline DCT, Huffman coding
+[File]          BitsPerSample                   : 8
+[File]          ColorComponents                 : 3
+[File]          YCbCrSubSampling                : YCbCr4:2:0 (2 2)
+[EXIF]          Orientation                     : Horizontal (normal)
+[EXIF]          ModifyDate                      : 2019:04:22 14:49:29
+[EXIF]          ExifVersion                     : 0221
+[EXIF]          DateTimeOriginal                : 2019:04:22 14:49:29
+[XMP]           XMPToolkit                      : Adobe XMP Core 5.6-c140 79.160451, 2017/05/06-01:08:21
+[XMP]           DocumentID                      : 8D7FFA310B29319324C94907A8B81AE7
+[XMP]           OriginalDocumentID              : 8D7FFA310B29319324C94907A8B81AE7
+[XMP]           InstanceID                      : xmp.iid:501eda76-4647-422e-a981-2f1e54b76f4f
+[XMP]           Format                          : image/jpeg
+[XMP]           MetadataDate                    : 2019:04:22 14:50:59+02:00
+[XMP]           ModifyDate                      : 2019:04:22 14:49:29
+[XMP]           DateCreated                     : 2019:04:22 14:49:29
+[XMP]           RawFileName                     : mire+edit_capture_time.jpg
+[XMP]           HistoryAction                   : saved, saved
+[XMP]           HistoryInstanceID               : xmp.iid:410d80e5-602c-4064-8277-1e8f04b09a7a, xmp.iid:501eda76-4647-422e-a981-2f1e54b76f4f
+[XMP]           HistoryWhen                     : 2019:04:22 14:49:29+02:00, 2019:04:22 14:50:59+02:00
+[XMP]           HistorySoftwareAgent            : Adobe Photoshop Lightroom Classic 8.2.1 (Macintosh), Adobe Photoshop Lightroom Classic 8.2.1 (Macintosh)
+[XMP]           HistoryChanged                  : /metadata, /metadata
+[IPTC]          CodedCharacterSet               : UTF8
+[IPTC]          ApplicationRecordVersion        : 4
+[IPTC]          DateCreated                     : 2019:04:22
+[IPTC]          TimeCreated                     : 14:49:29
+[Photoshop]     IPTCDigest                      : 51b387069299d9c8143d5e3bf4eec595
+[Composite]     DateTimeCreated                 : 2019:04:22 14:49:29
+[Composite]     ImageSize                       : 768x576
+[Composite]     Megapixels                      : 0.442

@@ -1,0 +1,35 @@
+[ExifTool]      ExifToolVersion                 : 11.30
+[File]          FileName                        : mire+save_metadata.jpg
+[File]          Directory                       : /Users/ak/.gopath/src/github.com/adrienkohlbecker/picturelint/cases/testdata
+[File]          FileSize                        : 74 kB
+[File]          FileModifyDate                  : 2019:04:22 14:49:29+02:00
+[File]          FileAccessDate                  : 2019:04:22 14:50:45+02:00
+[File]          FileInodeChangeDate             : 2019:04:22 14:49:29+02:00
+[File]          FilePermissions                 : rw-r--r--
+[File]          FileType                        : JPEG
+[File]          FileTypeExtension               : jpg
+[File]          MIMEType                        : image/jpeg
+[File]          ExifByteOrder                   : Big-endian (Motorola, MM)
+[File]          ImageWidth                      : 768
+[File]          ImageHeight                     : 576
+[File]          EncodingProcess                 : Baseline DCT, Huffman coding
+[File]          BitsPerSample                   : 8
+[File]          ColorComponents                 : 3
+[File]          YCbCrSubSampling                : YCbCr4:2:0 (2 2)
+[EXIF]          Orientation                     : Horizontal (normal)
+[EXIF]          ExifVersion                     : 0221
+[XMP]           XMPToolkit                      : Adobe XMP Core 5.6-c140 79.160451, 2017/05/06-01:08:21
+[XMP]           DocumentID                      : 8D7FFA310B29319324C94907A8B81AE7
+[XMP]           OriginalDocumentID              : 8D7FFA310B29319324C94907A8B81AE7
+[XMP]           InstanceID                      : xmp.iid:410d80e5-602c-4064-8277-1e8f04b09a7a
+[XMP]           Format                          : image/jpeg
+[XMP]           MetadataDate                    : 2019:04:22 14:49:29+02:00
+[XMP]           RawFileName                     : mire+save_metadata.jpg
+[XMP]           HistoryAction                   : saved
+[XMP]           HistoryInstanceID               : xmp.iid:410d80e5-602c-4064-8277-1e8f04b09a7a
+[XMP]           HistoryWhen                     : 2019:04:22 14:49:29+02:00
+[XMP]           HistorySoftwareAgent            : Adobe Photoshop Lightroom Classic 8.2.1 (Macintosh)
+[XMP]           HistoryChanged                  : /metadata
+[Photoshop]     IPTCDigest                      : d41d8cd98f00b204e9800998ecf8427e
+[Composite]     ImageSize                       : 768x576
+[Composite]     Megapixels                      : 0.442
