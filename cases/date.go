@@ -1,6 +1,7 @@
 package cases
 
 import (
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -343,7 +344,7 @@ func init() {
 				return
 			}
 
-			if strings.HasPrefix(p.Filename(), t.Format("20060102-150405-")) {
+			if !strings.HasPrefix(p.Filename(), t.Format("20060102-150405-")) {
 				c.Fail()
 			}
 
@@ -394,7 +395,7 @@ func init() {
 					return
 				}
 
-				endDate = time.Date(startDate.Year(), startDate.Month(), endDay, 0, 0, 0, 0, nil)
+				endDate = time.Date(startDate.Year(), startDate.Month(), endDay, 0, 0, 0, 0, startDate.Location())
 
 			}
 
@@ -440,6 +441,53 @@ func init() {
 
 			if !strings.HasPrefix(p.Filename(), album) {
 				c.Fail()
+			}
+
+		})
+
+		it(f, "matches known patterns", func(c *validators.Case, p *picture.Picture) {
+
+			tFilename, err := p.ParsedFilenameTime()
+			if err != nil {
+				c.Fail()
+			}
+
+			original := p.OriginalFilename()
+			original = strings.TrimSuffix(original, filepath.Ext(original))
+
+			formats := []string{
+				"2006-01-02 15.04.05",
+				"20060102 150405",
+				"20060102_150405",
+				"20060102_150405_HDR",
+				"20060102_150405(1)",
+				"20060102-150405",
+				"20060102150405",
+				"Bebop2_20060102150405-0700",
+				"ProShot_20060102_150405",
+				"VID_20060102_150405",
+				"IMG_20060102_150405",
+				"PANO_20060102_150405",
+				"Photo 02-01-2006 15 04 05",
+				"Photo on 02-01-2006 at 15.04",
+				"Screen Shot 2006-01-02 at 15.04.05",
+				"Screenshot_2006-01-02-15-04-05",
+				"signal-2006-01-02-150405",
+			}
+
+			for _, f := range formats {
+
+				tOriginal, err := time.Parse(f, original)
+				if err != nil {
+					// Ignore if we can't match it
+					continue
+				}
+
+				if tFilename != tOriginal {
+					c.Fail()
+					return
+				}
+
 			}
 
 		})

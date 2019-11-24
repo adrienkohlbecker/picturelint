@@ -74,6 +74,14 @@ func (p *Picture) Filename() string {
 	return filepath.Base(p.Path)
 }
 
+func (p *Picture) OriginalFilename() string {
+	return filepath.Base(p.Path)[16:]
+}
+
+func (p *Picture) ParsedFilenameTime() (time.Time, error) {
+	return time.Parse("20060102-150405-", p.Filename()[0:16])
+}
+
 func (p *Picture) Album() string {
 	return filepath.Base(filepath.Dir(p.Path))
 }
@@ -114,10 +122,6 @@ func (p *Picture) XMPModifyDate() string {
 	return p.ReadStringField("XMP:ModifyDate")
 }
 
-func (p *Picture) XMPXOffsetTime() string {
-	return p.ReadStringField("XMP:XOffsetTime")
-}
-
 func (p *Picture) IPTCDateCreated() string {
 	return p.ReadStringField("IPTC:DateCreated")
 }
@@ -131,7 +135,7 @@ func (p *Picture) QuickTimeCreationDate() string {
 }
 
 func (p *Picture) ParsedXMPDateTimeOriginal() (time.Time, error) {
-	return time.Parse("2006:01:02 15:04:05+07:00", p.XMPDateTimeOriginal())
+	return time.Parse("2006:01:02 15:04:05-07:00", p.XMPDateTimeOriginal())
 }
 
 func (p *Picture) ReadStringField(field string) string {
