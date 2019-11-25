@@ -368,7 +368,7 @@ func init() {
 				return
 			}
 
-			parsed, err := time.Parse("20060102", p.Filename()[0:8])
+			parsed, err := time.Parse("20060102-150405-", p.Filename()[0:16])
 			if err != nil {
 				c.Fail()
 				return
@@ -423,6 +423,9 @@ func init() {
 
 			}
 
+			// albums for one day can end at 7AM the next day to account for nights out
+			endDate = endDate.Add(24 * time.Hour).Add(7 * time.Hour)
+
 			if parsed.Before(startDate) || parsed.After(endDate) {
 				c.Fail()
 				return
@@ -430,7 +433,7 @@ func init() {
 
 		})
 
-		it(f, "belonds to year folder", func(c *validators.Case, p *picture.Picture) {
+		it(f, "belongs to year folder", func(c *validators.Case, p *picture.Picture) {
 
 			album := p.YearAlbum()
 			matched, err := regexp.MatchString(`^\d{4}$`, album)
@@ -439,7 +442,14 @@ func init() {
 				return
 			}
 
-			if !strings.HasPrefix(p.Filename(), album) {
+			year, err := strconv.Atoi(album)
+			if err != nil {
+				c.Fail()
+				return
+			}
+
+			// New years pictures are stored in the ending year
+			if !strings.HasPrefix(p.Filename(), album) && !strings.HasPrefix(p.Filename(), strconv.Itoa(year+1)+"0101-") {
 				c.Fail()
 			}
 
@@ -456,7 +466,6 @@ func init() {
 			original = strings.TrimSuffix(original, filepath.Ext(original))
 
 			formats := []string{
-				"2006-01-02 15.04.05",
 				"20060102 150405",
 				"20060102_150405",
 				"20060102_150405_HDR",
@@ -489,6 +498,27 @@ func init() {
 				}
 
 			}
+
+			// TODO: This format is UTC time
+			//
+			// formats := []string{
+			// 	"2006-01-02 15.04.05",
+			// }
+
+			// for _, f := range formats {
+
+			// 	tOriginal, err := time.Parse(f, original)
+			// 	if err != nil {
+			// 		// Ignore if we can't match it
+			// 		continue
+			// 	}
+
+			// 	if tFilename != tOriginal {
+			// 		c.Fail()
+			// 		return
+			// 	}
+
+			// }
 
 		})
 
