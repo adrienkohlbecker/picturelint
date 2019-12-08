@@ -368,6 +368,11 @@ func init() {
 				return
 			}
 
+			if len(p.Filename()) < 16 {
+				c.Fail()
+				return
+			}
+
 			parsed, err := time.Parse("20060102-150405-", p.Filename()[0:16])
 			if err != nil {
 				c.Fail()
@@ -436,6 +441,12 @@ func init() {
 		it(f, "belongs to year folder", func(c *validators.Case, p *picture.Picture) {
 
 			album := p.YearAlbum()
+
+			if album == "#rush" {
+				c.Skip()
+				return
+			}
+
 			matched, err := regexp.MatchString(`^\d{4}$`, album)
 			if err != nil || !matched {
 				c.Fail()
@@ -460,9 +471,15 @@ func init() {
 			tFilename, err := p.ParsedFilenameTime()
 			if err != nil {
 				c.Fail()
+				return
 			}
 
-			original := p.OriginalFilename()
+			original, err := p.OriginalFilename()
+			if err != nil {
+				c.Fail()
+				return
+			}
+
 			original = strings.TrimSuffix(original, filepath.Ext(original))
 
 			formats := []string{
@@ -492,7 +509,8 @@ func init() {
 					continue
 				}
 
-				if tFilename != tOriginal {
+				// formatted filename has no timezone, original can have one, so we compare time values directly
+				if tFilename.Year() != tOriginal.Year() || tFilename.Month() != tOriginal.Month() || tFilename.Day() != tOriginal.Day() || tFilename.Hour() != tOriginal.Hour() || tFilename.Minute() != tOriginal.Minute() || tFilename.Second() != tOriginal.Second() {
 					c.Fail()
 					return
 				}

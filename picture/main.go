@@ -1,6 +1,7 @@
 package picture
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -74,11 +75,17 @@ func (p *Picture) Filename() string {
 	return filepath.Base(p.Path)
 }
 
-func (p *Picture) OriginalFilename() string {
-	return filepath.Base(p.Path)[16:]
+func (p *Picture) OriginalFilename() (string, error) {
+	if len(p.Filename()) < 16 {
+		return "", fmt.Errorf("Attempting to parse a filename that doesn't have time prefix")
+	}
+	return filepath.Base(p.Path)[16:], nil
 }
 
 func (p *Picture) ParsedFilenameTime() (time.Time, error) {
+	if len(p.Filename()) < 16 {
+		return time.Time{}, fmt.Errorf("Attempting to parse a filename that doesn't have time prefix")
+	}
 	return time.Parse("20060102-150405-", p.Filename()[0:16])
 }
 
