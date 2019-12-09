@@ -50,6 +50,13 @@ func main() {
 				return nil
 			}
 
+			// TODO
+			for _, item := range picture.ImageExtensions {
+				if ext == item {
+					return nil
+				}
+			}
+
 			wg.Add(1)
 			files <- p
 

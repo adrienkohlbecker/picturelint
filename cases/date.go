@@ -278,6 +278,35 @@ func init() {
 
 		})
 
+		it(f, "is set for live videos", func(c *validators.Case, p *picture.Picture) {
+
+			if !p.IsLiveVideo() {
+				// only live videos have this tag
+				c.Skip()
+				return
+			}
+
+			if p.QuickTimeCreationDate() == "" {
+				c.Fail()
+			}
+
+		})
+
+		it(f, "is set to the original picture's EXIF:DateTimeOriginal (with TZ stripped) for live videos", func(c *validators.Case, p *picture.Picture) {
+
+			if !p.IsLiveVideo() {
+				// only live videos have this tag
+				c.Skip()
+				return
+			}
+
+			if p.QuickTimeCreationDate()[:19] != p.MasterEXIFDateTimeOriginal() {
+				c.Fail()
+				return
+			}
+
+		})
+
 	})
 
 	for _, f := range []string{"QuickTime:CreateDate", "QuickTime:ModifyDate", "QuickTime:TrackCreateDate", "QuickTime:TrackModifyDate", "QuickTime:MediaCreateDate", "QuickTime:MediaModifyDate"} {
@@ -428,8 +457,38 @@ func init() {
 
 			}
 
-			// albums for one day can end at 7AM the next day to account for nights out
-			endDate = endDate.Add(24 * time.Hour).Add(7 * time.Hour)
+			// day range accross years
+			matched, err = regexp.MatchString(`^\d{4}.\d{2}.\d{2}-\d{4}.\d{2}.\d{2}-`, album)
+			if err != nil {
+				c.Fail()
+				return
+			}
+			if matched {
+
+				endYear, err := strconv.Atoi(album[11:15])
+				if err != nil {
+					c.Fail()
+					return
+				}
+
+				endMonth, err := strconv.Atoi(album[16:18])
+				if err != nil {
+					c.Fail()
+					return
+				}
+
+				endDay, err := strconv.Atoi(album[19:21])
+				if err != nil {
+					c.Fail()
+					return
+				}
+
+				endDate = time.Date(endYear, time.Month(endMonth), endDay, 0, 0, 0, 0, startDate.Location())
+
+			}
+
+			// albums for one day can end at 2PM the next day to account for nights out
+			endDate = endDate.Add(24 * time.Hour).Add(14 * time.Hour)
 
 			if parsed.Before(startDate) || parsed.After(endDate) {
 				c.Fail()
@@ -468,7 +527,12 @@ func init() {
 
 		it(f, "matches known patterns", func(c *validators.Case, p *picture.Picture) {
 
-			tFilename, err := p.ParsedFilenameTime()
+			if p.XMPDateTimeOriginal() == "" {
+				c.Skip()
+				return
+			}
+
+			tMetadata, err := p.ParsedXMPDateTimeOriginal()
 			if err != nil {
 				c.Fail()
 				return
@@ -510,33 +574,36 @@ func init() {
 				}
 
 				// formatted filename has no timezone, original can have one, so we compare time values directly
-				if tFilename.Year() != tOriginal.Year() || tFilename.Month() != tOriginal.Month() || tFilename.Day() != tOriginal.Day() || tFilename.Hour() != tOriginal.Hour() || tFilename.Minute() != tOriginal.Minute() || tFilename.Second() != tOriginal.Second() {
+				if tMetadata.Year() != tOriginal.Year() || tMetadata.Month() != tOriginal.Month() || tMetadata.Day() != tOriginal.Day() || tMetadata.Hour() != tOriginal.Hour() || tMetadata.Minute() != tOriginal.Minute() || tMetadata.Second() != tOriginal.Second() {
 					c.Fail()
 					return
 				}
 
 			}
 
-			// TODO: This format is UTC time
-			//
-			// formats := []string{
-			// 	"2006-01-02 15.04.05",
-			// }
+			// This format is UTC time
+			formats = []string{
+				"2006-01-02 15.04.05",
+			}
 
-			// for _, f := range formats {
+			for _, f := range formats {
 
-			// 	tOriginal, err := time.Parse(f, original)
-			// 	if err != nil {
-			// 		// Ignore if we can't match it
-			// 		continue
-			// 	}
+				tOriginal, err := time.Parse(f, original)
+				if err != nil {
+					// Ignore if we can't match it
+					continue
+				}
 
-			// 	if tFilename != tOriginal {
-			// 		c.Fail()
-			// 		return
-			// 	}
+				if tMetadata.Year() != tOriginal.Year() || tMetadata.Month() != tOriginal.Month() || tMetadata.Day() != tOriginal.Day() || tMetadata.Hour() != tOriginal.Hour() || tMetadata.Minute() != tOriginal.Minute() || tMetadata.Second() != tOriginal.Second() {
+					// this format can also be UTC time
+					tMetadata = tMetadata.UTC()
+					if tMetadata.Year() != tOriginal.Year() || tMetadata.Month() != tOriginal.Month() || tMetadata.Day() != tOriginal.Day() || tMetadata.Hour() != tOriginal.Hour() || tMetadata.Minute() != tOriginal.Minute() || tMetadata.Second() != tOriginal.Second() {
+						c.Fail()
+						return
+					}
+				}
 
-			// }
+			}
 
 		})
 

@@ -13,6 +13,7 @@ import (
 type Picture struct {
 	Path        string
 	rawMetadata map[string]interface{}
+	master      *Picture
 }
 
 // Includes the dot because that's what filepath.Ext returns
@@ -23,6 +24,11 @@ func Load(path string) (*Picture, error) {
 
 	p := &Picture{Path: path}
 	err := p.ReadMetadata()
+	if err != nil {
+		return nil, err
+	}
+
+	err = p.ReadMasterMetadataIfExists()
 	if err != nil {
 		return nil, err
 	}
@@ -39,6 +45,49 @@ func (p *Picture) ReadMetadata() error {
 	}
 
 	p.rawMetadata = result
+	return nil
+
+}
+
+func (p *Picture) ReadMasterMetadataIfExists() error {
+
+	if !p.IsVideo() {
+		return nil
+	}
+
+	base := strings.TrimSuffix(p.Path, filepath.Ext(p.Path))
+	var masterPath string
+
+	for _, item := range ImageExtensions {
+		if item == ".png" {
+			// TODO: remove once previews are deleted
+			continue
+		}
+
+		test := base + strings.ToLower(item)
+		if FileExists(test) {
+			masterPath = test
+			break
+		}
+
+		test = base + strings.ToUpper(item)
+		if FileExists(test) {
+			masterPath = test
+			break
+		}
+	}
+
+	if masterPath != "" {
+
+		master, err := Load(masterPath)
+		if err != nil {
+			return err
+		}
+
+		p.master = master
+		return nil
+	}
+
 	return nil
 
 }
@@ -71,6 +120,10 @@ func (p *Picture) IsVideoPreview() bool {
 
 }
 
+func (p *Picture) IsLiveVideo() bool {
+	return p.IsVideo() && p.master != nil
+}
+
 func (p *Picture) Filename() string {
 	return filepath.Base(p.Path)
 }
@@ -99,6 +152,14 @@ func (p *Picture) YearAlbum() string {
 
 func (p *Picture) EXIFDateTimeOriginal() string {
 	return p.ReadStringField("EXIF:DateTimeOriginal")
+}
+
+func (p *Picture) MasterEXIFDateTimeOriginal() string {
+	if p.master == nil {
+		return ""
+	}
+
+	return p.master.ReadStringField("EXIF:DateTimeOriginal")
 }
 
 func (p *Picture) EXIFOffsetTime() string {
