@@ -51,14 +51,15 @@ func main() {
 			}
 
 			// TODO
-			for _, item := range picture.ImageExtensions {
+			for _, item := range picture.VideoExtensions {
 				if ext == item {
+
+					wg.Add(1)
+					files <- p
+
 					return nil
 				}
 			}
-
-			wg.Add(1)
-			files <- p
 
 		}
 
@@ -81,7 +82,7 @@ func visitFile(path string) error {
 	p, err := picture.Load(path)
 	if err != nil {
 		fmt.Printf("Error loading %s: %s\n", path, err)
-		os.Exit(1)
+		return err
 	}
 
 	res := cases.Run(p)

@@ -59,10 +59,6 @@ func (p *Picture) ReadMasterMetadataIfExists() error {
 	var masterPath string
 
 	for _, item := range ImageExtensions {
-		if item == ".png" {
-			// TODO: remove once previews are deleted
-			continue
-		}
 
 		test := base + strings.ToLower(item)
 		if FileExists(test) {
@@ -75,6 +71,7 @@ func (p *Picture) ReadMasterMetadataIfExists() error {
 			masterPath = test
 			break
 		}
+
 	}
 
 	if masterPath != "" {
